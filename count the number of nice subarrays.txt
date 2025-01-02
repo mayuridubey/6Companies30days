@@ -1,0 +1,30 @@
+class Solution {
+    
+public static int f(int []nums,int goal){
+        if(goal<0) return 0;
+       int l=0;
+        int r=0;
+        int count=0;
+        int sum=0;
+
+        while(r<nums.length){
+            sum+=nums[r];
+            while(l<r && sum>goal){
+                sum-=nums[l];
+                l++;
+            }
+            if(sum<=goal) count+=r-l+1;
+            r++;
+
+        }
+        return count;  
+    }
+    public int numberOfSubarrays(int[] nums, int k) {
+      int[]arr=new int[nums.length];
+      for(int i=0;i<nums.length;i++){
+        arr[i]=nums[i]%2;
+      }
+      return f(arr,k)-f(arr,k-1);
+        
+    }
+}
