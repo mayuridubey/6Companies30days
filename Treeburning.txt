@@ -1,0 +1,54 @@
+class Solution {
+    private static TreeNode helper(TreeNode root,int target){
+        if(root==null) return root;
+        if(root.val==target) return root;
+         TreeNode leftResult = helper(root.left, target);
+        if (leftResult != null) return leftResult;
+        return helper(root.right, target);
+
+    }
+    public int amountOfTime(TreeNode root, int start) {
+        int time=0;
+        HashMap<Integer,TreeNode> pmap=new HashMap<>();
+        HashSet<Integer> vis=new HashSet<>();
+        Queue<TreeNode> q=new LinkedList<>();
+        q.offer(root);
+        while(!q.isEmpty()){
+            TreeNode n=q.poll();
+            if(n.left!=null){
+                pmap.put(n.left.val,n);
+                q.offer(n.left);
+            }
+            if(n.right!=null){
+                pmap.put(n.right.val,n);
+                q.offer(n.right);
+            }
+        }
+        TreeNode initial=helper(root,start);
+        q.offer(initial);
+        vis.add(initial.val);
+        while(!q.isEmpty()){
+            int size=q.size();
+            for(int i=0;i<size;i++){
+                TreeNode n=q.poll();
+                if(n.left!=null && !vis.contains(n.left.val)){
+                    q.offer(n.left);
+                    vis.add(n.left.val);
+                }
+                if(n.right!=null && !vis.contains(n.right.val)){
+                    q.offer(n.right);
+                    vis.add(n.right.val);
+                }
+
+                if(pmap.containsKey(n.val) && !vis.contains((pmap.get(n.val)).val)){
+                    q.offer(pmap.get(n.val));
+                    vis.add((pmap.get(n.val)).val);
+                }
+            }
+            time++;
+        }
+        return time-1;
+
+        
+    }
+}
